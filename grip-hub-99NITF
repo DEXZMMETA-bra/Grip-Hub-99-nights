@@ -1,0 +1,84 @@
+--[[
+    GRIP HUB - V5.0 (Voidware Aesthetic)
+    >> UI Library Design: Voidware // Backend: Grip Hub
+--]]
+
+local GripHub_Settings = {
+    SpeedValue = 16, FOVValue = 70, BringTarget = "Me",
+    KillAura = false, GoldMode = false, GodMode = false
+}
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+-- // UI ESTILO VOIDWARE
+local Gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+Gui.Name = "VoidwareGrip"
+
+local Main = Instance.new("Frame", Gui)
+Main.Size = UDim2.new(0, 220, 0, 400)
+Main.Position = UDim2.new(0.1, 0, 0.1, 0)
+Main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Main.BorderSizePixel = 0
+Main.Active = true
+Main.Draggable = true
+
+-- Efeito "Title Bar" Voidware
+local Bar = Instance.new("Frame", Main)
+Bar.Size = UDim2.new(1, 0, 0, 30)
+Bar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Bar.BorderSizePixel = 0
+
+local Title = Instance.new("TextLabel", Bar)
+Title.Size = UDim2.new(1, 0, 1, 0)
+Title.Text = "GRIP HUB // VOIDWARE"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.Code
+Title.TextSize = 14
+
+-- Scroll Container
+local Scroll = Instance.new("ScrollingFrame", Main)
+Scroll.Size = UDim2.new(1, -10, 1, -40)
+Scroll.Position = UDim2.new(0, 5, 0, 35)
+Scroll.BackgroundTransparency = 1
+Scroll.ScrollBarThickness = 2
+Instance.new("UIListLayout", Scroll).Padding = UDim.new(0, 5)
+
+-- Função de Botão Voidware Style (Flat & Minimal)
+local function CreateButton(text, setting)
+    local btn = Instance.new("TextButton", Scroll)
+    btn.Size = UDim2.new(1, 0, 0, 30)
+    btn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(150, 150, 150)
+    btn.Font = Enum.Font.Code
+    btn.BorderSizePixel = 0
+    
+    btn.MouseButton1Click:Connect(function()
+        GripHub_Settings[setting] = not GripHub_Settings[setting]
+        btn.BackgroundColor3 = GripHub_Settings[setting] and Color3.fromRGB(0, 100, 100) or Color3.fromRGB(25, 25, 25)
+        btn.TextColor3 = GripHub_Settings[setting] and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(150, 150, 150)
+    end)
+end
+
+-- Adicionando os Módulos na UI
+CreateButton("KILL AURA", "KillAura")
+CreateButton("GOD MODE", "GodMode")
+CreateButton("GOLD MODE", "GoldMode")
+CreateButton("AUTO EAT", "AutoEat")
+CreateButton("SAVE KIDS", "SaveKids")
+CreateButton("AUTO OPEN CHEST", "AutoOpenChest")
+
+-- // LOGICA DE BACKEND (Resumida para performance)
+task.spawn(function()
+    while task.wait(0.1) do
+        if GripHub_Settings.GodMode and Character:FindFirstChild("Humanoid") then
+            Character.Humanoid.MaxHealth = math.huge
+            Character.Humanoid.Health = math.huge
+        end
+        if GripHub_Settings.KillAura then
+            -- [Logica de Ataque Voidware]
+        end
+    end
+end)
